@@ -1,0 +1,19 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Blue dual shape mark (abstract "A" or academic symbol) -->
+  <defs>
+    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2"/>
+    </filter>
+  </defs>
+  
+  <!-- Left shape -->
+  <path d="M 60 50 Q 50 80 60 120 Q 70 140 85 145 Q 95 100 85 60 Q 75 45 60 50" 
+        fill="#0052FF" filter="url(#blur)" opacity="0.9"/>
+  
+  <!-- Right shape -->
+  <path d="M 115 45 Q 130 50 140 70 Q 145 100 135 130 Q 125 155 110 150 Q 115 100 115 60 Q 115 48 115 45" 
+        fill="#0052FF" filter="url(#blur)" opacity="0.95"/>
+  
+  <!-- Center accent -->
+  <ellipse cx="100" cy="95" rx="12" ry="35" fill="#0052FF" opacity="0.7"/>
+</svg>
