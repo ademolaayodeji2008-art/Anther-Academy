@@ -161,6 +161,36 @@ anther-academy/
 └── SETUP.md                  # This file
 ```
 
+## 🚢 Deploying to Production (Free Tier)
+
+Repo already has the config files for this — `client/vercel.json` and `server/render.yaml`. You still need to do the account/connection steps yourself in each dashboard (they require your login, not something that can be scripted from here).
+
+### 1. Backend — Render
+
+1. Sign up at [render.com](https://render.com) and connect your GitHub account.
+2. New → Web Service → select the `Anther-Academy` repo. Render will detect `server/render.yaml` automatically (Blueprint).
+3. When prompted, fill in the env vars marked "secret" (these are **not** in the repo — copy the real values from your local `server/.env`): `SUPABASE_URL`, `SUPABASE_SECRET_KEY`, `JWT_SECRET`, `PAYSTACK_SECRET_KEY`, `CLOUDINARY_*`, `GMAIL_SMTP_*`, `ADMIN_EMAIL`.
+4. Leave `CLIENT_URL` blank for now — you'll set it after step 2 gives you the Vercel URL.
+5. Deploy. Note the resulting URL, e.g. `https://anther-academy-api.onrender.com`.
+6. **Free tier note:** this service spins down after ~15 min idle and takes 30-50s to wake on the next request — same kind of pause you saw with Supabase. No fix on the free tier besides upgrading or pinging it periodically.
+
+### 2. Frontend — Vercel
+
+1. Sign up at [vercel.com](https://vercel.com) and connect GitHub.
+2. Add New → Project → select the `Anther-Academy` repo.
+3. Set **Root Directory** to `client` (important — this is a two-app repo).
+4. Framework preset should auto-detect "Vite". Build command `npm run build`, output dir `dist`.
+5. Add env vars from `client/.env.example`, pointing at your real values — critically `VITE_API_BASE_URL` = the Render URL from step 1 (e.g. `https://anther-academy-api.onrender.com`).
+6. Deploy. Note the resulting URL, e.g. `https://anther-academy.vercel.app`.
+
+### 3. Wire them together
+
+Go back to the Render dashboard → your service → Environment → set `CLIENT_URL` to the Vercel URL from step 2 (no trailing slash). Render will redeploy automatically. This is what makes CORS accept requests from your live frontend.
+
+### 4. Database
+
+Supabase stays as-is — no redeploy needed there. Just keep an eye on it pausing from inactivity on the free tier (log in and hit "Restore" if an API call ever fails with a DB connection error).
+
 ## 🐛 Troubleshooting
 
 **"npm command not found"**

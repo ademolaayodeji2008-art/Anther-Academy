@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: anther-academy-api
+    env: node
+    plan: free
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_EXPIRY
+        value: 7d
+      - key: EMAIL_FROM_NAME
+        value: Anther Academy
+      - key: EMAIL_FROM_ADDRESS
+        value: noreply@antheracademy.com
+      - key: LOG_LEVEL
+        value: info
+      # Secrets - set actual values in the Render dashboard, not here
+      - key: CLIENT_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SECRET_KEY
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: PAYSTACK_SECRET_KEY
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: GMAIL_SMTP_USER
+        sync: false
+      - key: GMAIL_SMTP_PASS
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
