@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import CourseThumbnail from '../components/CourseThumbnail';
+import FadeIn from '../components/FadeIn';
 import {
   BookOpen,
   Briefcase,
@@ -114,41 +115,55 @@ export default function HomePage() {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="bg-navy-900 text-white py-24 md:py-32">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-16 items-end">
+      <section
+        className="relative bg-navy-900 text-white bg-cover bg-center min-h-[85vh] flex flex-col justify-center py-14"
+        style={{ backgroundImage: "url('/images/hero-home.jpg')" }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-navy-900/95 via-navy-900/85 to-navy-900/55" />
+        <div className="relative max-w-7xl mx-auto px-6 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-10 md:gap-16 items-center">
             <div className="md:col-span-3">
-              <p className="eyebrow text-gold-300 mb-6">Professional Accounting Training</p>
-              <h1 className="text-5xl md:text-6xl font-display font-semibold leading-[1.1] mb-8 text-white">
-                Practical training for every stage of an accounting career
-              </h1>
-              <p className="text-xl text-navy-200 mb-10 leading-relaxed max-w-xl">
-                From fresh graduates to chartered accountants—master on-the-job accounting skills that matter. Taught by practicing professionals. Real scenarios, real results.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link
-                  to="/register"
-                  className="btn-primary bg-gold-300 text-navy-900 hover:bg-gold-400 text-center"
-                >
-                  Enroll Now
-                </Link>
-                <Link
-                  to="/courses"
-                  className="btn-outline border-white/40 text-white hover:bg-white hover:text-navy-900 text-center"
-                >
-                  Explore Courses
-                </Link>
-              </div>
+              <FadeIn delay={0}>
+                <p className="eyebrow text-gold-300 mb-4">Professional Accounting Training</p>
+              </FadeIn>
+              <FadeIn delay={0.1}>
+                <h1 className="text-4xl md:text-5xl font-display font-semibold leading-[1.1] mb-5 text-white">
+                  Practical training for every stage of an accounting career
+                </h1>
+              </FadeIn>
+              <FadeIn delay={0.2}>
+                <p className="text-lg text-navy-200 mb-7 leading-relaxed max-w-xl">
+                  From fresh graduates to chartered accountants—master on-the-job accounting skills that matter. Taught by practicing professionals. Real scenarios, real results.
+                </p>
+              </FadeIn>
+              <FadeIn delay={0.3}>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Link
+                    to="/register"
+                    className="btn-primary bg-gold-300 text-navy-900 hover:bg-gold-400 text-center"
+                  >
+                    Enroll Now
+                  </Link>
+                  <Link
+                    to="/courses"
+                    className="btn-outline border-white/40 text-white hover:bg-white hover:text-navy-900 text-center"
+                  >
+                    Explore Courses
+                  </Link>
+                </div>
+              </FadeIn>
             </div>
             <div className="hidden md:block md:col-span-2">
-              <div className="border-l border-white/20 pl-10 space-y-8">
-                {stats.slice(0, 2).map((stat, idx) => (
-                  <div key={idx}>
-                    <p className="text-5xl font-display font-semibold text-gold-300 mb-1">{stat.value}</p>
-                    <p className="text-sm uppercase tracking-widest text-navy-300">{stat.label}</p>
-                  </div>
-                ))}
-              </div>
+              <FadeIn delay={0.4}>
+                <div className="border-l border-white/20 pl-10 space-y-6">
+                  {stats.slice(0, 2).map((stat, idx) => (
+                    <div key={idx}>
+                      <p className="text-4xl font-display font-semibold text-gold-300 mb-1">{stat.value}</p>
+                      <p className="text-sm uppercase tracking-widest text-navy-300">{stat.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </FadeIn>
             </div>
           </div>
         </div>
@@ -159,14 +174,16 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-slate-200">
             {stats.map((stat, idx) => (
-              <div key={idx} className="text-center py-10 px-4">
-                <p className="text-3xl md:text-4xl font-display font-semibold text-navy-900 mb-2">
-                  {stat.value}
-                </p>
-                <p className="text-sm text-slate-500 uppercase tracking-wide">
-                  {stat.label}
-                </p>
-              </div>
+              <FadeIn key={idx} delay={idx * 0.1}>
+                <div className="text-center py-10 px-4">
+                  <p className="text-3xl md:text-4xl font-display font-semibold text-navy-900 mb-2">
+                    {stat.value}
+                  </p>
+                  <p className="text-sm text-slate-500 uppercase tracking-wide">
+                    {stat.label}
+                  </p>
+                </div>
+              </FadeIn>
             ))}
           </div>
         </div>
@@ -175,31 +192,42 @@ export default function HomePage() {
       {/* Why Choose Us Section */}
       <section className="py-24">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="mb-16 max-w-2xl">
-            <p className="eyebrow mb-4">Why Anther Academy</p>
-            <h2 className="text-4xl font-display font-semibold text-navy-900 mb-4">Built by accountants, for accountants</h2>
-            <p className="text-lg text-slate-600 leading-relaxed">
-              Here's what sets our training apart from a standard course.
-            </p>
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-12 items-center mb-16">
+            <FadeIn className="md:col-span-2">
+              <div className="aspect-[16/9] md:aspect-[4/5] rounded-md overflow-hidden bg-slate-100 border border-slate-200">
+                <img
+                  src="/images/why-choose-us.jpg"
+                  alt="Students learning at Anther Academy"
+                  className="w-full h-full object-cover"
+                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                />
+              </div>
+            </FadeIn>
+            <FadeIn delay={0.1} className="md:col-span-3">
+              <p className="eyebrow mb-4">Why Anther Academy</p>
+              <h2 className="text-4xl font-display font-semibold text-navy-900 mb-4">Built by accountants, for accountants</h2>
+              <p className="text-lg text-slate-600 leading-relaxed">
+                Here's what sets our training apart from a standard course.
+              </p>
+            </FadeIn>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 border-t border-l border-slate-200">
             {whyChooseUs.map((item, idx) => {
               const IconComponent = item.icon;
               return (
-                <div
-                  key={idx}
-                  className="p-8 border-b border-r border-slate-200"
-                >
-                  <p className="font-display text-3xl text-gold-300 mb-4">{String(idx + 1).padStart(2, '0')}</p>
-                  <IconComponent className="w-6 h-6 text-navy-600 mb-4" strokeWidth={1.5} />
-                  <h3 className="text-lg font-display font-semibold text-navy-900 mb-3">
-                    {item.title}
-                  </h3>
-                  <p className="text-slate-600 leading-relaxed text-sm">
-                    {item.description}
-                  </p>
-                </div>
+                <FadeIn key={idx} delay={idx * 0.08}>
+                  <div className="p-8 border-b border-r border-slate-200 h-full">
+                    <p className="font-display text-3xl text-gold-300 mb-4">{String(idx + 1).padStart(2, '0')}</p>
+                    <IconComponent className="w-6 h-6 text-navy-600 mb-4" strokeWidth={1.5} />
+                    <h3 className="text-lg font-display font-semibold text-navy-900 mb-3">
+                      {item.title}
+                    </h3>
+                    <p className="text-slate-600 leading-relaxed text-sm">
+                      {item.description}
+                    </p>
+                  </div>
+                </FadeIn>
               );
             })}
           </div>
@@ -209,7 +237,7 @@ export default function HomePage() {
       {/* Featured Courses Section */}
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-end justify-between mb-12">
+          <FadeIn className="flex items-end justify-between mb-12">
             <div>
               <p className="eyebrow mb-4">Featured Courses</p>
               <h2 className="text-4xl font-display font-semibold text-navy-900 mb-2">Start your learning journey</h2>
@@ -221,7 +249,7 @@ export default function HomePage() {
             >
               View All Courses →
             </Link>
-          </div>
+          </FadeIn>
 
           {isLoading ? (
             <div className="text-center py-12">
@@ -229,46 +257,47 @@ export default function HomePage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {featuredCourses.map((course) => (
-                <Link
-                  key={course.id}
-                  to={`/courses/${course.slug}`}
-                  className="card overflow-hidden group"
-                >
-                  {/* Thumbnail */}
-                  <div className="h-48 bg-slate-200 overflow-hidden">
-                    <CourseThumbnail
-                      src={course.thumbnail_url}
-                      alt={course.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6">
-                    <div className={`inline-block px-3 py-1 rounded-sm text-xs font-semibold border mb-3 ${levelColors[course.level] || levelColors.new_to_practice}`}>
-                      {levelLabels[course.level] || 'Course'}
+              {featuredCourses.map((course, idx) => (
+                <FadeIn key={course.id} delay={idx * 0.1}>
+                  <Link
+                    to={`/courses/${course.slug}`}
+                    className="card overflow-hidden group block"
+                  >
+                    {/* Thumbnail */}
+                    <div className="h-48 bg-slate-200 overflow-hidden">
+                      <CourseThumbnail
+                        src={course.thumbnail_url}
+                        alt={course.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
                     </div>
 
-                    <h3 className="text-lg font-display font-semibold text-navy-900 mb-2 group-hover:text-navy-600 transition">
-                      {course.title}
-                    </h3>
+                    {/* Content */}
+                    <div className="p-6">
+                      <div className={`inline-block px-3 py-1 rounded-sm text-xs font-semibold border mb-3 ${levelColors[course.level] || levelColors.new_to_practice}`}>
+                        {levelLabels[course.level] || 'Course'}
+                      </div>
 
-                    <div className="flex items-center gap-4 text-sm text-slate-600 mb-4">
-                      <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4" strokeWidth={1.5} />
-                        <span>{course.duration_weeks} weeks</span>
+                      <h3 className="text-lg font-display font-semibold text-navy-900 mb-2 group-hover:text-navy-600 transition">
+                        {course.title}
+                      </h3>
+
+                      <div className="flex items-center gap-4 text-sm text-slate-600 mb-4">
+                        <div className="flex items-center gap-2">
+                          <Clock className="w-4 h-4" strokeWidth={1.5} />
+                          <span>{course.duration_weeks} weeks</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between pt-4 border-t border-slate-200">
+                        <span className="text-2xl font-display font-semibold text-gold-500">
+                          ₦{course.price.toLocaleString()}
+                        </span>
+                        <span className="text-navy-600 font-medium text-sm uppercase tracking-wide">Learn →</span>
                       </div>
                     </div>
-
-                    <div className="flex items-center justify-between pt-4 border-t border-slate-200">
-                      <span className="text-2xl font-display font-semibold text-gold-500">
-                        ₦{course.price.toLocaleString()}
-                      </span>
-                      <span className="text-navy-600 font-medium text-sm uppercase tracking-wide">Learn →</span>
-                    </div>
-                  </div>
-                </Link>
+                  </Link>
+                </FadeIn>
               ))}
             </div>
           )}
@@ -287,34 +316,33 @@ export default function HomePage() {
       {/* Testimonials Section */}
       <section className="py-24 bg-slate-50 border-y border-slate-200">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="mb-16 max-w-2xl">
+          <FadeIn className="mb-16 max-w-2xl">
             <p className="eyebrow mb-4">What Our Students Say</p>
             <h2 className="text-4xl font-display font-semibold text-navy-900 mb-4">Hear from the practice</h2>
             <p className="text-lg text-slate-600 leading-relaxed">
               Graduates who've elevated their accounting practice with Anther Academy.
             </p>
-          </div>
+          </FadeIn>
 
           <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-200 border-t border-slate-200">
             {testimonials.map((testimonial, idx) => (
-              <div
-                key={idx}
-                className="flex flex-col p-8 first:pl-0 md:first:pl-0"
-              >
-                <p className="font-display text-4xl text-gold-300 mb-4 leading-none">"</p>
+              <FadeIn key={idx} delay={idx * 0.1}>
+                <div className="flex flex-col p-8 first:pl-0 md:first:pl-0 h-full">
+                  <p className="font-display text-4xl text-gold-300 mb-4 leading-none">"</p>
 
-                <p className="text-slate-700 mb-8 flex-grow leading-relaxed">
-                  {testimonial.quote}
-                </p>
-
-                <div className="pt-4 border-t border-slate-200">
-                  <p className="font-display font-semibold text-navy-900">{testimonial.name}</p>
-                  <p className="text-sm text-slate-600">{testimonial.role}</p>
-                  <p className="text-xs text-gold-600 font-medium mt-1 uppercase tracking-wide">
-                    {testimonial.level}
+                  <p className="text-slate-700 mb-8 flex-grow leading-relaxed">
+                    {testimonial.quote}
                   </p>
+
+                  <div className="pt-4 border-t border-slate-200">
+                    <p className="font-display font-semibold text-navy-900">{testimonial.name}</p>
+                    <p className="text-sm text-slate-600">{testimonial.role}</p>
+                    <p className="text-xs text-gold-600 font-medium mt-1 uppercase tracking-wide">
+                      {testimonial.level}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              </FadeIn>
             ))}
           </div>
         </div>
@@ -323,19 +351,21 @@ export default function HomePage() {
       {/* CTA Section */}
       <section className="bg-navy-900 text-white py-24">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <p className="eyebrow text-gold-300 mb-6 justify-center flex">Get Started</p>
-          <h2 className="text-3xl md:text-4xl font-display font-semibold mb-6">
-            Ready to sharpen your accounting skills?
-          </h2>
-          <p className="text-lg text-navy-200 mb-10 max-w-2xl mx-auto">
-            Join accountants from every level who are advancing their practice with Anther Academy.
-          </p>
-          <Link
-            to="/register"
-            className="btn-primary bg-gold-300 text-navy-900 hover:bg-gold-400 inline-block"
-          >
-            Enroll Now
-          </Link>
+          <FadeIn>
+            <p className="eyebrow text-gold-300 mb-6 justify-center flex">Get Started</p>
+            <h2 className="text-3xl md:text-4xl font-display font-semibold mb-6">
+              Ready to sharpen your accounting skills?
+            </h2>
+            <p className="text-lg text-navy-200 mb-10 max-w-2xl mx-auto">
+              Join accountants from every level who are advancing their practice with Anther Academy.
+            </p>
+            <Link
+              to="/register"
+              className="btn-primary bg-gold-300 text-navy-900 hover:bg-gold-400 inline-block"
+            >
+              Enroll Now
+            </Link>
+          </FadeIn>
         </div>
       </section>
 

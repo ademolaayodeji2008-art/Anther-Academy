@@ -15,7 +15,7 @@ export default function Navigation() {
   const navLinkClass = "relative text-sm uppercase tracking-widest font-medium text-slate-700 hover:text-navy-900 transition-colors after:absolute after:left-0 after:-bottom-1 after:h-px after:w-0 after:bg-gold-400 after:transition-all hover:after:w-full";
 
   return (
-    <nav className="bg-white/95 backdrop-blur border-b border-slate-200 sticky top-0 z-50">
+    <nav className="bg-white border-b border-slate-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}

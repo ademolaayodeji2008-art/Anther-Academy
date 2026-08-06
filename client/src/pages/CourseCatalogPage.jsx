@@ -3,6 +3,8 @@ import { Link, useSearchParams } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import CourseThumbnail from '../components/CourseThumbnail';
+import PageHero from '../components/PageHero';
+import FadeIn from '../components/FadeIn';
 import { BookOpen, Clock } from 'lucide-react';
 import axios from 'axios';
 
@@ -88,15 +90,12 @@ export default function CourseCatalogPage() {
       <Navigation />
 
       {/* Page Header */}
-      <section className="bg-navy-900 text-white py-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <p className="eyebrow text-gold-300 mb-5">Courses</p>
-          <h1 className="text-4xl md:text-5xl font-display font-semibold mb-4">Browse All Courses</h1>
-          <p className="text-lg text-navy-200">
-            Practical accounting training for every professional level
-          </p>
-        </div>
-      </section>
+      <PageHero
+        image="/images/hero-courses.jpg"
+        eyebrow="Courses"
+        title="Browse All Courses"
+        subtitle="Practical accounting training for every professional level"
+      />
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-16">
@@ -195,50 +194,51 @@ export default function CourseCatalogPage() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {filteredCourses.map(course => (
-                  <Link
-                    key={course.id}
-                    to={`/courses/${course.slug}`}
-                    className="card overflow-hidden group"
-                  >
-                    {/* Thumbnail */}
-                    <div className="h-48 bg-slate-200 overflow-hidden">
-                      <CourseThumbnail
-                        src={course.thumbnail_url}
-                        alt={course.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-
-                    {/* Content */}
-                    <div className="p-6">
-                      <div className={`inline-block px-3 py-1 rounded-sm text-xs font-semibold border mb-3 ${levelColors[course.level]}`}>
-                        {levelLabels[course.level]}
+                {filteredCourses.map((course, idx) => (
+                  <FadeIn key={course.id} delay={(idx % 4) * 0.08}>
+                    <Link
+                      to={`/courses/${course.slug}`}
+                      className="card overflow-hidden group block"
+                    >
+                      {/* Thumbnail */}
+                      <div className="h-48 bg-slate-200 overflow-hidden">
+                        <CourseThumbnail
+                          src={course.thumbnail_url}
+                          alt={course.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
                       </div>
 
-                      <h3 className="text-lg font-display font-semibold text-navy-900 mb-2 group-hover:text-navy-600 transition line-clamp-2">
-                        {course.title}
-                      </h3>
+                      {/* Content */}
+                      <div className="p-6">
+                        <div className={`inline-block px-3 py-1 rounded-sm text-xs font-semibold border mb-3 ${levelColors[course.level]}`}>
+                          {levelLabels[course.level]}
+                        </div>
 
-                      <p className="text-sm text-slate-600 mb-4 line-clamp-2">
-                        {course.description}
-                      </p>
+                        <h3 className="text-lg font-display font-semibold text-navy-900 mb-2 group-hover:text-navy-600 transition line-clamp-2">
+                          {course.title}
+                        </h3>
 
-                      <div className="flex items-center gap-4 text-sm text-slate-600 mb-4">
-                        <div className="flex items-center gap-2">
-                          <Clock className="w-4 h-4" strokeWidth={1.5} />
-                          <span>{course.duration_weeks} weeks</span>
+                        <p className="text-sm text-slate-600 mb-4 line-clamp-2">
+                          {course.description}
+                        </p>
+
+                        <div className="flex items-center gap-4 text-sm text-slate-600 mb-4">
+                          <div className="flex items-center gap-2">
+                            <Clock className="w-4 h-4" strokeWidth={1.5} />
+                            <span>{course.duration_weeks} weeks</span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-between pt-4 border-t border-slate-200">
+                          <span className="text-xl font-display font-semibold text-gold-500">
+                            ₦{course.price.toLocaleString()}
+                          </span>
+                          <span className="text-navy-600 font-medium text-sm uppercase tracking-wide">View →</span>
                         </div>
                       </div>
-
-                      <div className="flex items-center justify-between pt-4 border-t border-slate-200">
-                        <span className="text-xl font-display font-semibold text-gold-500">
-                          ₦{course.price.toLocaleString()}
-                        </span>
-                        <span className="text-navy-600 font-medium text-sm uppercase tracking-wide">View →</span>
-                      </div>
-                    </div>
-                  </Link>
+                    </Link>
+                  </FadeIn>
                 ))}
               </div>
             )}

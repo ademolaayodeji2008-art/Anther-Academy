@@ -1,19 +1,20 @@
-<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-  <!-- Blue dual shape mark (abstract "A" or academic symbol) -->
-  <defs>
-    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="2"/>
-    </filter>
-  </defs>
-  
-  <!-- Left shape -->
-  <path d="M 60 50 Q 50 80 60 120 Q 70 140 85 145 Q 95 100 85 60 Q 75 45 60 50" 
-        fill="#0052FF" filter="url(#blur)" opacity="0.9"/>
-  
-  <!-- Right shape -->
-  <path d="M 115 45 Q 130 50 140 70 Q 145 100 135 130 Q 125 155 110 150 Q 115 100 115 60 Q 115 48 115 45" 
-        fill="#0052FF" filter="url(#blur)" opacity="0.95"/>
-  
-  <!-- Center accent -->
-  <ellipse cx="100" cy="95" rx="12" ry="35" fill="#0052FF" opacity="0.7"/>
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Anther Academy">
+  <!-- Academic mark: pediment + columns motif (temple of learning), navy + gold -->
+  <circle cx="100" cy="100" r="94" fill="#0f1829"/>
+  <circle cx="100" cy="100" r="94" fill="none" stroke="#cfa958" stroke-width="2.5"/>
+
+  <!-- Pediment (roof/triangle) -->
+  <polygon points="100,52 138,96 62,96" fill="#cfa958"/>
+
+  <!-- Entablature bar under pediment -->
+  <rect x="58" y="96" width="84" height="7" fill="#cfa958"/>
+
+  <!-- Columns -->
+  <rect x="70" y="107" width="11" height="41" fill="#f8fafc"/>
+  <rect x="94.5" y="107" width="11" height="41" fill="#f8fafc"/>
+  <rect x="119" y="107" width="11" height="41" fill="#f8fafc"/>
+
+  <!-- Stylobate (base) -->
+  <rect x="56" y="148" width="88" height="7" fill="#cfa958"/>
+  <rect x="50" y="155" width="100" height="6" fill="#cfa958" opacity="0.55"/>
 </svg>
