@@ -20,7 +20,7 @@ export default function Navigation() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 hover:opacity-80 transition">
-            <img src="/logo.svg" alt="Anther Academy" className="w-9 h-9" />
+            <img src="/logo.png" alt="Anther Academy" className="w-10 h-10 object-contain" />
             <span className="text-lg font-display font-semibold text-navy-900 hidden sm:inline">Anther Academy</span>
           </Link>
 

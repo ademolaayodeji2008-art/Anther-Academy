@@ -11,7 +11,7 @@ export default function Footer() {
           {/* About */}
           <div>
             <div className="flex items-center gap-2.5 mb-4">
-              <img src="/logo.svg" alt="Anther Academy" className="w-9 h-9" />
+              <img src="/logo.png" alt="Anther Academy" className="w-10 h-10 object-contain" />
               <span className="text-lg font-display font-semibold">Anther Academy</span>
             </div>
             <p className="text-navy-200 text-sm leading-relaxed">
