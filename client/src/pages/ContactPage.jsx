@@ -50,19 +50,19 @@ export default function ContactPage() {
     {
       icon: Mail,
       title: 'Email',
-      value: 'hello@antheracademy.com',
-      link: 'mailto:hello@antheracademy.com',
+      value: 'info@antheracademy.com',
+      link: 'mailto:info@antheracademy.com',
     },
     {
       icon: Phone,
       title: 'Phone',
-      value: '+234 (0) 123 456 789',
-      link: 'tel:+234123456789',
+      value: '+234 803 498 2305',
+      link: 'tel:+2348034982305',
     },
     {
       icon: MapPin,
       title: 'Location',
-      value: 'Lagos, Nigeria',
+      value: 'Ibadan, Nigeria',
       link: '#',
     },
     {
