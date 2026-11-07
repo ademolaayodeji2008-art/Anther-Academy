@@ -357,13 +357,13 @@ export default function HomePage() {
               Ready to sharpen your accounting skills?
             </h2>
             <p className="text-lg text-navy-200 mb-10 max-w-2xl mx-auto">
-              Join accountants from every level who are advancing their practice with Anther Academy.
+              Submit your Expression of Interest today and join accountants from every level who are advancing their practice with Anther Academy.
             </p>
             <Link
-              to="/register"
+              to="/expression-of-interest"
               className="btn-primary bg-gold-300 text-navy-900 hover:bg-gold-400 inline-block"
             >
-              Enroll Now
+              Apply Now
             </Link>
           </FadeIn>
         </div>

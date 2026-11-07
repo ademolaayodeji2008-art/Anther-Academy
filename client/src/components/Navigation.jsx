@@ -70,8 +70,8 @@ export default function Navigation() {
                 <Link to="/login" className="btn-outline px-4 py-2">
                   Login
                 </Link>
-                <Link to="/register" className="btn-primary px-4 py-2">
-                  Enroll Now
+                <Link to="/expression-of-interest" className="btn-primary px-4 py-2">
+                  Apply Now
                 </Link>
               </>
             )}
@@ -153,8 +153,8 @@ export default function Navigation() {
                   <Link to="/login" className="btn-outline w-full text-center">
                     Login
                   </Link>
-                  <Link to="/register" className="btn-primary w-full text-center">
-                    Enroll Now
+                  <Link to="/expression-of-interest" className="btn-primary w-full text-center">
+                    Apply Now
                   </Link>
                 </>
               )}
