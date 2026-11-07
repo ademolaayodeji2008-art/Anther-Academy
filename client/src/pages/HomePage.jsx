@@ -139,10 +139,10 @@ export default function HomePage() {
               <FadeIn delay={0.3}>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Link
-                    to="/register"
-                    className="btn-primary bg-gold-300 text-navy-900 hover:bg-gold-400 text-center"
+                    to="/expression-of-interest"
+                    className="btn-primary bg-gold-500 text-navy-900 hover:bg-gold-600 text-center font-bold"
                   >
-                    Enroll Now
+                    Apply Now - Express Your Interest
                   </Link>
                   <Link
                     to="/courses"
@@ -365,6 +365,30 @@ export default function HomePage() {
             >
               Enroll Now
             </Link>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* CTA Section - Expression of Interest */}
+      <section className="py-16 bg-gradient-to-br from-navy-900 to-navy-800 text-white">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <FadeIn>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Ready to Start Your Journey?
+            </h2>
+            <p className="text-lg text-navy-200 mb-8">
+              Submit your Expression of Interest today. Our admissions team will review your profile
+              and guide you through the next steps to join ANTHER Academy.
+            </p>
+            <Link
+              to="/expression-of-interest"
+              className="inline-block px-8 py-4 bg-gold-500 hover:bg-gold-600 text-navy-900 font-bold text-lg rounded-lg transition-colors shadow-lg"
+            >
+              Express Your Interest Now →
+            </Link>
+            <p className="text-sm text-navy-300 mt-4">
+              Free to submit • Takes 5 minutes • Get response within 48 hours
+            </p>
           </FadeIn>
         </div>
       </section>

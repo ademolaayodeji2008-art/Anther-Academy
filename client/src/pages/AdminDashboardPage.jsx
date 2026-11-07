@@ -209,18 +209,60 @@ export default function AdminDashboardPage() {
                 <div className="text-3xl font-bold text-orange-600">{overview.pending_payments}</div>
               </div>
             </div>
+
+            {/* EOI & Applications Metrics */}
+            <div>
+              <h3 className="text-xl font-bold text-navy-900 mb-4">Expression of Interest & Applications</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <Link to="/admin/eoi" className="card p-6 hover:shadow-lg transition-shadow">
+                  <div className="text-sm font-medium text-slate-600 mb-2">Pending EOI Reviews</div>
+                  <div className="text-3xl font-bold text-yellow-600">{overview.pending_eoi || 0}</div>
+                  <p className="text-xs text-slate-500 mt-1">Awaiting admission decision</p>
+                </Link>
+
+                <Link to="/admin/eoi" className="card p-6 hover:shadow-lg transition-shadow">
+                  <div className="text-sm font-medium text-slate-600 mb-2">Total EOI Submissions</div>
+                  <div className="text-3xl font-bold text-navy-900">{overview.total_eoi || 0}</div>
+                  <p className="text-xs text-slate-500 mt-1">All time submissions</p>
+                </Link>
+
+                <Link to="/admin/eoi" className="card p-6 hover:shadow-lg transition-shadow">
+                  <div className="text-sm font-medium text-slate-600 mb-2">Admitted Students</div>
+                  <div className="text-3xl font-bold text-green-600">{overview.admitted_eoi || 0}</div>
+                  <p className="text-xs text-slate-500 mt-1">Granted admission</p>
+                </Link>
+
+                <Link to="/admin/applications" className="card p-6 hover:shadow-lg transition-shadow">
+                  <div className="text-sm font-medium text-slate-600 mb-2">Pending Applications</div>
+                  <div className="text-3xl font-bold text-orange-600">{overview.pending_applications || 0}</div>
+                  <p className="text-xs text-slate-500 mt-1">Awaiting review</p>
+                </Link>
+              </div>
+            </div>
           </div>
         )}
 
         {/* Applications Tab */}
         {activeTab === 'applications' && (
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-navy-900">Programme Applications</h2>
-            <div className="card p-8 text-center">
-              <p className="text-slate-600 mb-4">Review and manage course applications from prospective students</p>
-              <Link to="/admin/applications" className="btn-primary">
-                Manage Applications →
-              </Link>
+            <h2 className="text-2xl font-bold text-navy-900">Admissions Management</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="card p-8 text-center">
+                <h3 className="text-xl font-semibold text-navy-900 mb-3">Expression of Interest</h3>
+                <p className="text-slate-600 mb-4">Review and approve EOI submissions. Grant or deny admissions.</p>
+                <Link to="/admin/eoi" className="btn-primary">
+                  Manage EOI →
+                </Link>
+              </div>
+
+              <div className="card p-8 text-center">
+                <h3 className="text-xl font-semibold text-navy-900 mb-3">Full Applications</h3>
+                <p className="text-slate-600 mb-4">Review complete applications from admitted students</p>
+                <Link to="/admin/applications" className="btn-primary">
+                  Manage Applications →
+                </Link>
+              </div>
             </div>
           </div>
         )}

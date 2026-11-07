@@ -405,4 +405,234 @@ router.post('/webhook', async (req, res) => {
   }
 });
 
+/**
+ * POST /api/payments/admission-form/initialize
+ * Initialize admission form payment (₦2,000)
+ * Protected: Requires JWT authentication
+ */
+router.post('/admission-form/initialize', authenticateToken, async (req, res) => {
+  try {
+    const { eoi_id, amount } = req.body;
+    const user_id = req.user.id;
+
+    // Validation
+    if (!eoi_id) {
+      return res.status(400).json({
+        error: 'Validation error',
+        message: 'eoi_id is required',
+      });
+    }
+
+    // Fixed admission form amount
+    const ADMISSION_FEE = 2000;
+    if (amount && amount !== ADMISSION_FEE) {
+      return res.status(400).json({
+        error: 'Invalid amount',
+        message: `Admission form fee is fixed at ₦${ADMISSION_FEE}`,
+      });
+    }
+
+    // Fetch EOI
+    const { data: eoi, error: eoiError } = await supabase
+      .from('expressions_of_interest')
+      .select('*')
+      .eq('id', eoi_id)
+      .single();
+
+    if (!eoi || eoiError) {
+      return res.status(404).json({
+        error: 'Not found',
+        message: 'Expression of interest not found',
+      });
+    }
+
+    // Verify EOI belongs to current user
+    if (eoi.user_id !== user_id) {
+      return res.status(403).json({
+        error: 'Forbidden',
+        message: 'This EOI does not belong to you',
+      });
+    }
+
+    // Check admission status
+    if (eoi.admission_status !== 'admitted') {
+      return res.status(403).json({
+        error: 'Not admitted',
+        message: 'You must be admitted before paying admission form fee',
+      });
+    }
+
+    // Check if already paid
+    if (eoi.admission_form_paid) {
+      return res.status(409).json({
+        error: 'Already paid',
+        message: 'Admission form fee has already been paid',
+      });
+    }
+
+    // Get user email
+    const { data: user, error: userError } = await supabase
+      .from('users')
+      .select('email, full_name')
+      .eq('id', user_id)
+      .single();
+
+    if (!user || userError) {
+      return res.status(500).json({
+        error: 'Server error',
+        message: 'Failed to fetch user details',
+      });
+    }
+
+    // Generate unique reference
+    const paymentReference = `ADM-${eoi_id.slice(0, 8)}-${uuidv4().split('-')[0].toUpperCase()}`;
+
+    // Amount in kobo
+    const amountInKobo = ADMISSION_FEE * 100;
+
+    try {
+      // Initialize Paystack transaction
+      const paystackResult = await initializeTransaction({
+        amount: amountInKobo,
+        email: user.email,
+        reference: paymentReference,
+        metadata: {
+          payment_type: 'admission_form',
+          eoi_id,
+          user_id,
+          full_name: user.full_name,
+        },
+      });
+
+      console.log(`✅ Admission form payment initialized for EOI ${eoi_id}`);
+
+      res.status(200).json({
+        message: 'Payment initialization successful',
+        authorization_url: paystackResult.authorization_url,
+        access_code: paystackResult.access_code,
+        reference: paymentReference,
+        amount: ADMISSION_FEE,
+        eoi_id,
+      });
+    } catch (paystackError) {
+      console.error('🔴 Paystack error:', paystackError.message);
+      return res.status(500).json({
+        error: 'Payment error',
+        message: paystackError.message,
+      });
+    }
+  } catch (error) {
+    console.error('🔴 Admission payment initialization error:', error.message);
+    res.status(500).json({
+      error: 'Server error',
+      message: 'Failed to initialize admission form payment',
+    });
+  }
+});
+
+/**
+ * GET /api/payments/admission-form/verify/:reference
+ * Verify admission form payment and update EOI record
+ * Protected: Requires JWT authentication
+ */
+router.get('/admission-form/verify/:reference', authenticateToken, async (req, res) => {
+  try {
+    const { reference } = req.params;
+    const { eoi_id } = req.query;
+    const user_id = req.user.id;
+
+    console.log(`🔐 VERIFYING ADMISSION PAYMENT - Reference: ${reference}, EOI: ${eoi_id}`);
+
+    // Fetch EOI
+    const { data: eoi, error: eoiError } = await supabase
+      .from('expressions_of_interest')
+      .select('*')
+      .eq('id', eoi_id)
+      .single();
+
+    if (!eoi || eoiError) {
+      return res.status(404).json({
+        error: 'Not found',
+        message: 'Expression of interest not found',
+      });
+    }
+
+    // Verify ownership
+    if (eoi.user_id !== user_id) {
+      return res.status(403).json({
+        error: 'Forbidden',
+        message: 'This EOI does not belong to you',
+      });
+    }
+
+    // Check if already paid
+    if (eoi.admission_form_paid) {
+      console.warn(`⚠️  Admission form already paid for EOI ${eoi_id}`);
+      return res.status(200).json({
+        message: 'Admission form fee already paid',
+        status: 'already_paid',
+        eoi,
+      });
+    }
+
+    // Verify with Paystack
+    let verificationResult;
+    try {
+      verificationResult = await verifyTransaction(reference);
+    } catch (verifyError) {
+      console.error('🔴 Paystack verification failed:', verifyError.message);
+      return res.status(500).json({
+        error: 'Verification error',
+        message: 'Failed to verify payment with Paystack',
+      });
+    }
+
+    if (!verificationResult.success) {
+      console.warn(`⚠️  Payment verification failed: ${reference} - Status: ${verificationResult.status}`);
+      return res.status(400).json({
+        error: 'Payment not successful',
+        message: `Payment status: ${verificationResult.status}. Please try again.`,
+        status: 'failed',
+      });
+    }
+
+    // Update EOI with payment confirmation
+    console.log(`✅ PAYSTACK VERIFIED - Updating EOI ${eoi_id} payment status`);
+
+    const { data: updatedEOI, error: updateError } = await supabase
+      .from('expressions_of_interest')
+      .update({
+        admission_form_paid: true,
+        admission_form_payment_reference: reference,
+        admission_form_paid_at: new Date().toISOString(),
+      })
+      .eq('id', eoi_id)
+      .select()
+      .single();
+
+    if (updateError) {
+      console.error('🔴 Error updating EOI payment status:', updateError);
+      return res.status(500).json({
+        error: 'Server error',
+        message: 'Payment verified but failed to update EOI record',
+      });
+    }
+
+    console.log(`🎉 ADMISSION FORM PAID - EOI ${eoi_id} can now apply`);
+
+    res.status(200).json({
+      message: 'Admission form payment verified successfully!',
+      status: 'success',
+      eoi: updatedEOI,
+      payment_reference: reference,
+    });
+  } catch (error) {
+    console.error('🔴 Admission payment verification error:', error.message);
+    res.status(500).json({
+      error: 'Server error',
+      message: 'Failed to verify admission form payment',
+    });
+  }
+});
+
 export default router;

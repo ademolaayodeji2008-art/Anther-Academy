@@ -108,6 +108,43 @@ router.get('/overview', authenticateToken, requireAdmin, async (req, res) => {
         console.error('🔴 Error counting certificates:', certsError);
       }
 
+      // EOI statistics
+      const { count: totalEOI, error: eoiTotalError } = await supabase
+        .from('expressions_of_interest')
+        .select('*', { count: 'exact' });
+
+      if (eoiTotalError) {
+        console.error('🔴 Error counting total EOI:', eoiTotalError);
+      }
+
+      const { count: pendingEOI, error: eoiPendingError } = await supabase
+        .from('expressions_of_interest')
+        .select('*', { count: 'exact' })
+        .eq('admission_status', 'pending');
+
+      if (eoiPendingError) {
+        console.error('🔴 Error counting pending EOI:', eoiPendingError);
+      }
+
+      const { count: admittedEOI, error: eoiAdmittedError } = await supabase
+        .from('expressions_of_interest')
+        .select('*', { count: 'exact' })
+        .eq('admission_status', 'admitted');
+
+      if (eoiAdmittedError) {
+        console.error('🔴 Error counting admitted EOI:', eoiAdmittedError);
+      }
+
+      // Pending applications count
+      const { count: pendingApplications, error: appsError } = await supabase
+        .from('programme_applications')
+        .select('*', { count: 'exact' })
+        .eq('status', 'submitted');
+
+      if (appsError) {
+        console.error('🔴 Error counting pending applications:', appsError);
+      }
+
       console.log('✅ Admin overview data fetched successfully');
 
       return {
@@ -119,6 +156,10 @@ router.get('/overview', authenticateToken, requireAdmin, async (req, res) => {
         pending_payments: pendingPayments || 0,
         total_courses: totalCourses || 0,
         total_certificates: totalCertificates || 0,
+        total_eoi: totalEOI || 0,
+        pending_eoi: pendingEOI || 0,
+        admitted_eoi: admittedEOI || 0,
+        pending_applications: pendingApplications || 0,
       };
     })();
 

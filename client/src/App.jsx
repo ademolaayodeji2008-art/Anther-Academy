@@ -27,6 +27,10 @@ import AdminCoursesPage from './pages/AdminCoursesPage';
 import AdminStudentsPage from './pages/AdminStudentsPage';
 import AdminPaymentsPage from './pages/AdminPaymentsPage';
 import AdminEnrollmentsPage from './pages/AdminEnrollmentsPage';
+import ExpressionOfInterestPage from './pages/ExpressionOfInterestPage';
+import AdminEOIPage from './pages/AdminEOIPage';
+import AdmissionFormPaymentPage from './pages/AdmissionFormPaymentPage';
+import AdmissionPaymentCallbackPage from './pages/AdmissionPaymentCallbackPage';
 
 export default function App() {
   return (
@@ -36,8 +40,27 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/courses" element={<CourseCatalogPage />} />
         <Route path="/courses/:courseId" element={<CourseDetailPage />} />
+        <Route path="/expression-of-interest" element={<ExpressionOfInterestPage />} />
         <Route path="/apply/:courseId" element={<ProgrammeApplicationPage />} />
         <Route path="/application-status" element={<ApplicationStatusPage />} />
+        
+        {/* Admission Form Payment Routes */}
+        <Route 
+          path="/admission-form-payment" 
+          element={
+            <ProtectedRoute>
+              <AdmissionFormPaymentPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admission-payment-callback" 
+          element={
+            <ProtectedRoute>
+              <AdmissionPaymentCallbackPage />
+            </ProtectedRoute>
+          } 
+        />
         <Route path="/set-password" element={<SetPasswordPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
@@ -171,6 +194,15 @@ export default function App() {
           element={
             <ProtectedRoute>
               <AdminApplicationDetailPage />
+            </ProtectedRoute>
+          } 
+        />
+
+        <Route 
+          path="/admin/eoi" 
+          element={
+            <ProtectedRoute>
+              <AdminEOIPage />
             </ProtectedRoute>
           } 
         />

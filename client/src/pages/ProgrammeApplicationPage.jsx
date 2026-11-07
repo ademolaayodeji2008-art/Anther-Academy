@@ -35,6 +35,9 @@ export default function ProgrammeApplicationPage() {
   const [error, setError] = useState(null);
   const [uploadProgress, setUploadProgress] = useState({});
   const [applicationRef, setApplicationRef] = useState(null);
+  const [accessDenied, setAccessDenied] = useState(false);
+  const [accessMessage, setAccessMessage] = useState('');
+  const [checkingAccess, setCheckingAccess] = useState(true);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -127,8 +130,59 @@ export default function ProgrammeApplicationPage() {
 
   // Fetch course details
   useEffect(() => {
-    const fetchCourse = async () => {
+    const checkAccessAndFetchCourse = async () => {
       try {
+        // First check if user has paid admission form fee
+        const token = localStorage.getItem('token');
+        if (!token) {
+          setAccessDenied(true);
+          setAccessMessage('Please log in to apply for courses');
+          setCheckingAccess(false);
+          return;
+        }
+
+        // Check EOI admission and payment status
+        try {
+          const userResponse = await axios.get(`${API_BASE_URL}/api/auth/me`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          const userId = userResponse.data.user.id;
+          const userEmail = userResponse.data.user.email;
+
+          const eoiResponse = await axios.get(`${API_BASE_URL}/api/eoi/check-admission`, {
+            headers: { Authorization: `Bearer ${token}` },
+            params: { user_id: userId, email: userEmail },
+          });
+
+          const eoi = eoiResponse.data.eoi;
+
+          // Check if admitted
+          if (eoi.admission_status !== 'admitted') {
+            setAccessDenied(true);
+            setAccessMessage('You must be admitted before applying. Please submit an Expression of Interest first.');
+            setCheckingAccess(false);
+            return;
+          }
+
+          // Check if admission form fee is paid
+          if (!eoi.admission_form_paid) {
+            setAccessDenied(true);
+            setAccessMessage('Please pay the admission form fee (₦2,000) before proceeding with your application.');
+            setCheckingAccess(false);
+            return;
+          }
+
+          // Access granted - continue to fetch course
+          setCheckingAccess(false);
+        } catch (eoiErr) {
+          console.error('Error checking EOI status:', eoiErr);
+          setAccessDenied(true);
+          setAccessMessage('No admission record found. Please submit an Expression of Interest first.');
+          setCheckingAccess(false);
+          return;
+        }
+
         // courseId is actually the slug (passed from /apply/:courseId route)
         const response = await axios.get(`${API_BASE_URL}/api/courses/${courseId}`);
         setCourse(response.data.course);
@@ -140,7 +194,7 @@ export default function ProgrammeApplicationPage() {
       }
     };
 
-    fetchCourse();
+    checkAccessAndFetchCourse();
   }, [courseId]);
 
   const totalSteps = 14;
@@ -342,6 +396,57 @@ export default function ProgrammeApplicationPage() {
       setSubmitting(false);
     }
   };
+
+  if (checkingAccess || loading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Navigation />
+        <div className="max-w-3xl mx-auto px-6 py-20">
+          <p className="text-center text-slate-600">
+            {checkingAccess ? 'Verifying access...' : 'Loading application form...'}
+          </p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (accessDenied) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Navigation />
+        <div className="max-w-3xl mx-auto px-6 py-20">
+          <div className="card p-12 text-center">
+            <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+            <p className="text-lg font-medium text-slate-900 mb-2">Access Denied</p>
+            <p className="text-slate-600 mb-6">{accessMessage}</p>
+            <div className="flex gap-4 justify-center">
+              {accessMessage.includes('Expression of Interest') && (
+                <button 
+                  onClick={() => navigate('/expression-of-interest')} 
+                  className="btn-primary"
+                >
+                  Submit Expression of Interest
+                </button>
+              )}
+              {accessMessage.includes('admission form fee') && (
+                <button 
+                  onClick={() => navigate('/admission-form-payment')} 
+                  className="btn-primary"
+                >
+                  Pay Admission Form Fee
+                </button>
+              )}
+              <button onClick={() => navigate('/courses')} className="px-6 py-3 border-2 border-navy-500 text-navy-600 rounded-lg hover:bg-navy-50 transition-colors font-medium">
+                Back to Courses
+              </button>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   if (loading) {
     return (

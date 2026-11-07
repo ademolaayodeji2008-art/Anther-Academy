@@ -14,6 +14,7 @@ import adminRoutes from './routes/admin.js';
 import adminCoursesRoutes from './routes/admin-courses.js';
 import adminAttendanceRoutes from './routes/admin-attendance.js';
 import applicationsRoutes from './routes/applications.js';
+import eoiRoutes from './routes/eoi.js';
 import uploadsRoutes from './routes/uploads.js';
 import passwordResetRoutes from './routes/password-reset.js';
 
@@ -84,6 +85,7 @@ app.use('/api/admin/courses', adminCoursesRoutes);
 app.use('/api/admin/attendance', adminAttendanceRoutes);
 app.use('/api/applications', applicationsRoutes);  // Public endpoints: POST /, GET /status
 app.use('/api/admin/applications', applicationsRoutes);  // Admin endpoints: GET /, GET /:id, PATCH /:id/review
+app.use('/api/eoi', eoiRoutes);  // Expression of Interest routes
 app.use('/api/upload', uploadsRoutes);
 app.use('/api/password-reset', passwordResetRoutes);
 
